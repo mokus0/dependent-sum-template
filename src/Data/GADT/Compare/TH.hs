@@ -89,6 +89,11 @@ geqClause bndrs con = do
 newtype GComparing a b t = GComparing (Either (GOrdering a b) t)
 
 instance Functor (GComparing a b) where fmap f (GComparing x) = GComparing (either Left (Right . f) x)
+
+instance Applicative (GComparing a b) where
+    pure = return
+    (<*>) = ap
+
 instance Monad (GComparing a b) where
     return = GComparing . Right
     GComparing (Left  x) >>= f = GComparing (Left x)
